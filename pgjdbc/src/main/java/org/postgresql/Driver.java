@@ -231,7 +231,13 @@ public class Driver implements java.sql.Driver {
       }
     }
     // parse URL and add more properties
-    if ((props = parseURL(url, props)) == null) {
+    try {
+      props = parseURL(url, props);
+    } catch (Exception e) {
+      props = null;
+    }
+
+    if (props == null) {
       LOGGER.log(Level.SEVERE, "Error in url: {0}", url);
       return null;
     }
@@ -463,7 +469,11 @@ public class Driver implements java.sql.Driver {
    */
   @Override
   public boolean acceptsURL(String url) {
-    return parseURL(url, null) != null;
+    try {
+      return parseURL(url, null) != null;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   /**
@@ -483,7 +493,10 @@ public class Driver implements java.sql.Driver {
   @Override
   public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) {
     Properties copy = new Properties(info);
-    Properties parse = parseURL(url, copy);
+    Properties parse = null;
+    try {
+      parse = parseURL(url, copy);
+    } catch (Exception e) {}
     if (parse != null) {
       copy = parse;
     }
@@ -538,7 +551,7 @@ public class Driver implements java.sql.Driver {
    * @param defaults Default properties
    * @return Properties with elements added from the url
    */
-  public static Properties parseURL(String url, Properties defaults) {
+  public static Properties parseURL(String url, Properties defaults) throws Exception {
     Properties urlProps = new Properties(defaults);
 
     String l_urlServer = url;

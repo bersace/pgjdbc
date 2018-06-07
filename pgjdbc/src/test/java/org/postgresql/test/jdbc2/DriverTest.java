@@ -81,6 +81,7 @@ public class DriverTest {
 
   private void verifyUrl(Driver drv, String url, String hosts, String ports, String dbName)
       throws Exception {
+    drv.parseURL(url, null);
     assertTrue(url, drv.acceptsURL(url));
     Method parseMethod =
         drv.getClass().getDeclaredMethod("parseURL", String.class, Properties.class);

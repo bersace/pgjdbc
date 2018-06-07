@@ -1106,8 +1106,10 @@ public abstract class BaseDataSource implements CommonDataSource, Referenceable 
    * @param url properties to set
    */
   public void setUrl(String url) {
-
-    Properties p = org.postgresql.Driver.parseURL(url, null);
+    Properties p = null;
+    try {
+      p = org.postgresql.Driver.parseURL(url, null);
+    } catch (Exception e) { }
 
     for (PGProperty property : PGProperty.values()) {
       setProperty(property, property.get(p));

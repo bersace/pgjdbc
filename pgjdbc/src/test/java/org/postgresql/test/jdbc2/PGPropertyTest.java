@@ -209,7 +209,10 @@ public class PGPropertyTest {
             + URLEncoder.encode(databaseName)
             + "?user=" + URLEncoder.encode(userName)
             + "&password=" + URLEncoder.encode(password);
-    Properties parsed = Driver.parseURL(url, new Properties());
+    Properties parsed = null;
+    try {
+      parsed = Driver.parseURL(url, new Properties());
+    } catch (Exception e) {}
     assertEquals("database", databaseName, PGProperty.PG_DBNAME.get(parsed));
     assertEquals("user", userName, PGProperty.USER.get(parsed));
     assertEquals("password", password, PGProperty.PASSWORD.get(parsed));
